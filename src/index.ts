@@ -9,14 +9,18 @@ dotenv.config();
 
 const app = express();
 
+const orderBook = new OrderBook();
+
 app.get("/", (_, res) => {
   res.send("Backend is running");
 });
 
+app.get("/api/orderbook/stats", (req, res) => {
+  res.json(orderBook.getStats());
+});
+
 const testAuth = async () => {
   try {
-    const orderBook = new OrderBook();
-
     const token = await createWebSocketToken();
 
     connectWebSocket(
