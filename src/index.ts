@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import { createWebSocketToken } from "./services/inx/auth";
 import { connectWebSocket } from "./ws/client";
 import { OrderBook } from "./orderbook/OrderBook";
@@ -8,6 +9,7 @@ import { handleMessage } from "./ws/handler";
 dotenv.config();
 
 const app = express();
+app.use(cors());
 
 const orderBook = new OrderBook();
 
