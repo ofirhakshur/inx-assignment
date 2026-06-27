@@ -39,7 +39,5 @@ export const createWebSocketToken = async () => {
 
   const data = await response.json();
 
-  console.log("token response:", data);
-
   return data.websocketToken;
 };
