@@ -1,6 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import { createWebSocketToken } from "./services/inx/auth";
+import { connectWebSocket } from "./ws/client";
+import { OrderBook } from "./orderbook/OrderBook";
+import { handleMessage } from "./ws/handler";
 
 dotenv.config();
 
@@ -12,8 +15,15 @@ app.get("/", (_, res) => {
 
 const testAuth = async () => {
   try {
+    const orderBook = new OrderBook();
+
     const token = await createWebSocketToken();
-    console.log("🔥 websocketToken:", token);
+
+    connectWebSocket(
+      token,
+      process.env.INX_API_KEY_ID!,
+      handleMessage(orderBook),
+    );
   } catch (err) {
     console.error("❌ auth failed:", err);
   }

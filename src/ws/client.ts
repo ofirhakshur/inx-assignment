@@ -1,6 +1,10 @@
 import WebSocket from "ws";
 
-export const connectWebSocket = (token: string, apiKeyId: string) => {
+export const connectWebSocket = (
+  token: string,
+  apiKeyId: string,
+  onMessage: (data: any) => void,
+) => {
   const ws = new WebSocket("wss://gw-client-api-ws.uat.inx.co", {
     headers: {
       authorization: token,
@@ -10,6 +14,17 @@ export const connectWebSocket = (token: string, apiKeyId: string) => {
 
   ws.on("open", () => {
     console.log("✅ WebSocket connected");
+
+    ws.send(
+      JSON.stringify({
+        event: "orderBook/subscribeOrderBook",
+        data: {
+          marketName: "BTC-USD",
+          depth: 20,
+          clientRequestId: crypto.randomUUID(),
+        },
+      }),
+    );
   });
 
   ws.on("error", (err) => {
@@ -21,7 +36,8 @@ export const connectWebSocket = (token: string, apiKeyId: string) => {
   });
 
   ws.on("message", (data) => {
-    console.log("📩", data.toString());
+    const parsed = JSON.parse(data.toString());
+    onMessage(parsed);
   });
 
   return ws;
