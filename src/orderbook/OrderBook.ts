@@ -28,6 +28,13 @@ export class OrderBook {
     return Math.min(...this.asks.keys());
   }
 
+  getState() {
+    return {
+      bids: Array.from(this.bids.entries()),
+      asks: Array.from(this.asks.entries()),
+    };
+  }
+
   getStats() {
     const bestBid = this.getBestBid();
     const bestAsk = this.getBestAsk();

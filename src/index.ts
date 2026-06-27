@@ -17,6 +17,10 @@ app.get("/", (_, res) => {
   res.send("Backend is running");
 });
 
+app.get("/api/orderbook", (req, res) => {
+  res.json(orderBook.getState());
+});
+
 app.get("/api/orderbook/stats", (req, res) => {
   res.json(orderBook.getStats());
 });
